@@ -1,0 +1,14 @@
+[
+  {"product_id": "P001", "lead_time_days": 2, "min_order_qty": 24, "pack_size": 24},
+  {"product_id": "P002", "lead_time_days": 3, "min_order_qty": 48, "pack_size": 24},
+  {"product_id": "P003", "lead_time_days": 3, "min_order_qty": 24, "pack_size": 24},
+  {"product_id": "P004", "lead_time_days": 2, "min_order_qty": 30, "pack_size": 30},
+  {"product_id": "P005", "lead_time_days": 2, "min_order_qty": 24, "pack_size": 24},
+  {"product_id": "P006", "lead_time_days": 4, "min_order_qty": 20, "pack_size": 20},
+  {"product_id": "P007", "lead_time_days": 3, "min_order_qty": 24, "pack_size": 24},
+  {"product_id": "P008", "lead_time_days": 5, "min_order_qty": 12, "pack_size": 12},
+  {"product_id": "P009", "lead_time_days": 2, "min_order_qty": 50, "pack_size": 50},
+  {"product_id": "P010", "lead_time_days": 4, "min_order_qty": 10, "pack_size": 5},
+  {"product_id": "P011", "lead_time_days": 5, "min_order_qty": 12, "pack_size": 12},
+  {"product_id": "P012", "lead_time_days": 1, "min_order_qty": 12, "pack_size": 12}
+]

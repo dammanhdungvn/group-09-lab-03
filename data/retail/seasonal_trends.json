@@ -1,0 +1,86 @@
+[
+  {
+    "period_id": "summer",
+    "label": "Mùa hè",
+    "description": "Thời tiết nóng làm tăng nhu cầu nước uống, sữa và đồ ăn nhẹ dùng liền.",
+    "category_multipliers": {
+      "beverage": 1.45,
+      "dairy": 1.18,
+      "snack": 1.12
+    },
+    "product_multipliers": {
+      "P001": 1.55,
+      "P002": 1.65,
+      "P003": 1.35,
+      "P005": 1.22
+    },
+    "promotion_categories": ["household", "personal_care"]
+  },
+  {
+    "period_id": "rainy_season",
+    "label": "Mùa mưa",
+    "description": "Khách mua nhiều mì gói, cà phê gói và sản phẩm gia dụng hơn vì ít ra ngoài.",
+    "category_multipliers": {
+      "instant_food": 1.35,
+      "household": 1.18,
+      "grocery": 1.12
+    },
+    "product_multipliers": {
+      "P004": 1.45,
+      "P009": 1.32,
+      "P008": 1.25
+    },
+    "promotion_categories": ["beverage", "snack"]
+  },
+  {
+    "period_id": "tet_holiday",
+    "label": "Trước Tết",
+    "description": "Nhu cầu dự trữ thực phẩm, nước uống, trứng và gạo tăng mạnh trước kỳ nghỉ Tết.",
+    "category_multipliers": {
+      "beverage": 1.35,
+      "fresh_food": 1.5,
+      "grocery": 1.42,
+      "instant_food": 1.28
+    },
+    "product_multipliers": {
+      "P001": 1.5,
+      "P004": 1.35,
+      "P010": 1.58,
+      "P012": 1.7
+    },
+    "promotion_categories": ["personal_care", "household"]
+  },
+  {
+    "period_id": "back_to_school",
+    "label": "Tựu trường",
+    "description": "Nhu cầu sữa hộp, snack và nước uống tiện lợi tăng khi học sinh quay lại trường.",
+    "category_multipliers": {
+      "dairy": 1.35,
+      "snack": 1.28,
+      "beverage": 1.16
+    },
+    "product_multipliers": {
+      "P002": 1.25,
+      "P005": 1.45,
+      "P006": 1.22,
+      "P007": 1.3
+    },
+    "promotion_categories": ["household", "grocery"]
+  },
+  {
+    "period_id": "month_end_budget",
+    "label": "Cuối tháng",
+    "description": "Khách nhạy giá hơn, ưu tiên hàng thiết yếu và gói nhỏ.",
+    "category_multipliers": {
+      "instant_food": 1.22,
+      "grocery": 1.12,
+      "beverage": 0.95
+    },
+    "product_multipliers": {
+      "P004": 1.3,
+      "P009": 1.25,
+      "P010": 1.18
+    },
+    "promotion_categories": ["snack", "personal_care"]
+  }
+]

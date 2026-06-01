@@ -1,8 +1,8 @@
 # Group Report: Lab 3 - Production-Grade Agentic System
 
-- **Team Name**: [Name]
-- **Team Members**: [Member 1, Member 2, ...]
-- **Deployment Date**: [YYYY-MM-DD]
+- **Team Name**: Nhóm 09
+- **Team Members**: [Đàm Mạnh Dũng, Nguyễn Hoàng Thanh Tùng, Lê Bá Chiến]
+- **Deployment Date**: [2026-06-01]
 
 ---
 

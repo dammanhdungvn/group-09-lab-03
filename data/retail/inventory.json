@@ -1,0 +1,14 @@
+[
+  {"product_id": "P001", "stock_on_hand": 24, "reorder_point": 30, "safety_stock": 12},
+  {"product_id": "P002", "stock_on_hand": 80, "reorder_point": 70, "safety_stock": 30},
+  {"product_id": "P003", "stock_on_hand": 160, "reorder_point": 50, "safety_stock": 20},
+  {"product_id": "P004", "stock_on_hand": 18, "reorder_point": 35, "safety_stock": 14},
+  {"product_id": "P005", "stock_on_hand": 42, "reorder_point": 40, "safety_stock": 16},
+  {"product_id": "P006", "stock_on_hand": 210, "reorder_point": 45, "safety_stock": 20},
+  {"product_id": "P007", "stock_on_hand": 140, "reorder_point": 55, "safety_stock": 22},
+  {"product_id": "P008", "stock_on_hand": 90, "reorder_point": 20, "safety_stock": 8},
+  {"product_id": "P009", "stock_on_hand": 35, "reorder_point": 45, "safety_stock": 18},
+  {"product_id": "P010", "stock_on_hand": 16, "reorder_point": 22, "safety_stock": 8},
+  {"product_id": "P011", "stock_on_hand": 120, "reorder_point": 30, "safety_stock": 12},
+  {"product_id": "P012", "stock_on_hand": 20, "reorder_point": 30, "safety_stock": 10}
+]

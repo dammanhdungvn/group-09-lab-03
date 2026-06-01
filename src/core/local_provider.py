@@ -1,7 +1,6 @@
 import time
 import os
 from typing import Dict, Any, Optional, Generator
-from llama_cpp import Llama
 from src.core.llm_provider import LLMProvider
 
 class LocalProvider(LLMProvider):
@@ -21,6 +20,14 @@ class LocalProvider(LLMProvider):
         
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"Model file not found at {model_path}. Please download it first.")
+
+        try:
+            from llama_cpp import Llama
+        except ImportError as exc:
+            raise RuntimeError(
+                "llama-cpp-python is required for LocalProvider. "
+                "Install it with: pip install -r requirements-local.txt"
+            ) from exc
 
         # n_threads=None will use all available cores
         self.llm = Llama(

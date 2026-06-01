@@ -1,0 +1,98 @@
+[
+  {
+    "product_id": "P001",
+    "name": "Coca Cola 330ml",
+    "category": "beverage",
+    "unit": "can",
+    "unit_price": 10000,
+    "unit_cost": 7000
+  },
+  {
+    "product_id": "P002",
+    "name": "Aquafina 500ml",
+    "category": "beverage",
+    "unit": "bottle",
+    "unit_price": 6000,
+    "unit_cost": 3600
+  },
+  {
+    "product_id": "P003",
+    "name": "Green Tea 455ml",
+    "category": "beverage",
+    "unit": "bottle",
+    "unit_price": 11000,
+    "unit_cost": 7600
+  },
+  {
+    "product_id": "P004",
+    "name": "Instant Noodles Beef",
+    "category": "instant_food",
+    "unit": "pack",
+    "unit_price": 4500,
+    "unit_cost": 3100
+  },
+  {
+    "product_id": "P005",
+    "name": "Fresh Milk 180ml",
+    "category": "dairy",
+    "unit": "box",
+    "unit_price": 9000,
+    "unit_cost": 6200
+  },
+  {
+    "product_id": "P006",
+    "name": "Choco Cookies 120g",
+    "category": "snack",
+    "unit": "pack",
+    "unit_price": 18000,
+    "unit_cost": 12500
+  },
+  {
+    "product_id": "P007",
+    "name": "Potato Chips 60g",
+    "category": "snack",
+    "unit": "pack",
+    "unit_price": 15000,
+    "unit_cost": 9800
+  },
+  {
+    "product_id": "P008",
+    "name": "Dish Soap 400ml",
+    "category": "household",
+    "unit": "bottle",
+    "unit_price": 28000,
+    "unit_cost": 19000
+  },
+  {
+    "product_id": "P009",
+    "name": "Coffee Sachet 20g",
+    "category": "instant_food",
+    "unit": "sachet",
+    "unit_price": 3500,
+    "unit_cost": 2200
+  },
+  {
+    "product_id": "P010",
+    "name": "Rice Bag 5kg",
+    "category": "grocery",
+    "unit": "bag",
+    "unit_price": 95000,
+    "unit_cost": 79000
+  },
+  {
+    "product_id": "P011",
+    "name": "Toothpaste 180g",
+    "category": "personal_care",
+    "unit": "tube",
+    "unit_price": 32000,
+    "unit_cost": 22000
+  },
+  {
+    "product_id": "P012",
+    "name": "Chicken Eggs 10-pack",
+    "category": "fresh_food",
+    "unit": "tray",
+    "unit_price": 33000,
+    "unit_cost": 26000
+  }
+]

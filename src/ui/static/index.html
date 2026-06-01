@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Retail Stock Advisor</title>
+    <style>
+      :root {
+        --bg: #f7f8fb;
+        --surface: #ffffff;
+        --surface-2: #eef3f5;
+        --text: #162027;
+        --muted: #65727d;
+        --border: #dce4e8;
+        --accent: #0f766e;
+        --accent-dark: #0b5f59;
+        --danger: #b42318;
+        --warning: #a15c07;
+        --ok: #067647;
+        --shadow: 0 16px 42px rgba(22, 32, 39, 0.1);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      .shell {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 280px minmax(0, 1fr);
+      }
+
+      aside {
+        background: #102027;
+        color: #f8fafc;
+        padding: 28px 22px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 34px;
+      }
+
+      .mark {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border-radius: 8px;
+        background: #20b486;
+        color: #102027;
+        font-weight: 800;
+      }
+
+      .brand strong {
+        display: block;
+        font-size: 17px;
+      }
+
+      .brand span {
+        color: #b6c4cc;
+        font-size: 12px;
+      }
+
+      .nav-card {
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .nav-card h2 {
+        margin: 0 0 10px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0;
+        color: #d8e2e7;
+      }
+
+      .nav-card p {
+        margin: 0;
+        color: #b6c4cc;
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      main {
+        padding: 30px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+        font-size: 30px;
+        line-height: 1.15;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: var(--muted);
+        max-width: 720px;
+        line-height: 1.55;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(120px, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+
+      .metric {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 14px;
+      }
+
+      .metric span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .metric strong {
+        display: block;
+        margin-top: 6px;
+        font-size: 24px;
+      }
+
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+        gap: 18px;
+      }
+
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+      }
+
+      .panel-header {
+        padding: 18px 18px 0;
+      }
+
+      .panel-header h2 {
+        margin: 0;
+        font-size: 17px;
+      }
+
+      .panel-body {
+        padding: 18px;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      textarea,
+      select {
+        width: 100%;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #fbfcfd;
+        color: var(--text);
+        font: inherit;
+      }
+
+      textarea {
+        min-height: 140px;
+        padding: 13px;
+        resize: vertical;
+        line-height: 1.5;
+      }
+
+      select {
+        padding: 12px;
+      }
+
+      .field {
+        margin-bottom: 16px;
+      }
+
+      button {
+        width: 100%;
+        border: 0;
+        border-radius: 8px;
+        padding: 13px 16px;
+        background: var(--accent);
+        color: white;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: var(--accent-dark);
+      }
+
+      button:disabled {
+        cursor: progress;
+        opacity: 0.6;
+      }
+
+      .answer {
+        white-space: pre-wrap;
+        line-height: 1.6;
+        background: var(--surface-2);
+        border-radius: 8px;
+        padding: 16px;
+        min-height: 190px;
+      }
+
+      .tabs {
+        display: flex;
+        gap: 8px;
+        padding: 0 18px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .tab {
+        width: auto;
+        background: transparent;
+        color: var(--muted);
+        border-radius: 0;
+        border-bottom: 3px solid transparent;
+        padding: 12px 4px;
+      }
+
+      .tab.active {
+        background: transparent;
+        color: var(--accent-dark);
+        border-bottom-color: var(--accent);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+
+      th,
+      td {
+        padding: 12px 10px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .risk-high {
+        color: var(--danger);
+        font-weight: 800;
+      }
+
+      .risk-medium {
+        color: var(--warning);
+        font-weight: 800;
+      }
+
+      .trace {
+        display: grid;
+        gap: 10px;
+        max-height: 560px;
+        overflow: auto;
+        padding-right: 6px;
+      }
+
+      .trace-item {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px;
+        background: #fbfcfd;
+      }
+
+      .trace-item code {
+        display: block;
+        margin-top: 8px;
+        color: var(--accent-dark);
+        white-space: pre-wrap;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @media (max-width: 980px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+
+        aside {
+          display: none;
+        }
+
+        main {
+          padding: 20px;
+        }
+
+        .topbar,
+        .workspace {
+          grid-template-columns: 1fr;
+          display: grid;
+        }
+
+        .metrics {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside>
+        <div class="brand">
+          <div class="mark">RS</div>
+          <div>
+            <strong>Retail Stock Advisor</strong>
+            <span>ReAct tool-driven demo</span>
+          </div>
+        </div>
+        <div class="nav-card">
+          <h2>Decision Flow</h2>
+          <p>Inventory, 7-day demand, 30-day sell-through, stockout risk, slow movers, reorder quantity.</p>
+        </div>
+      </aside>
+
+      <main>
+        <section class="topbar">
+          <div>
+            <h1>Agent tư vấn nhập hàng và khuyến mãi</h1>
+            <p class="subtitle">
+              Dữ liệu được khóa trong mock dataset để giảm hallucination. Mỗi khuyến nghị đều có trace công cụ,
+              số liệu tồn kho và lịch sử bán hàng.
+            </p>
+          </div>
+        </section>
+
+        <section class="metrics">
+          <div class="metric"><span>Sản phẩm phân tích</span><strong id="metricProducts">0</strong></div>
+          <div class="metric"><span>Cần nhập thêm</span><strong id="metricRestock">0</strong></div>
+          <div class="metric"><span>Nên giảm giá</span><strong id="metricPromo">0</strong></div>
+          <div class="metric"><span>Theo mùa vụ</span><strong id="metricSeasonal">0</strong></div>
+          <div class="metric"><span>Tool calls</span><strong id="metricCalls">0</strong></div>
+        </section>
+
+        <section class="workspace">
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Câu hỏi quản lý</h2>
+            </div>
+            <div class="panel-body">
+              <div class="field">
+                <label for="question">Prompt</label>
+                <textarea id="question">Tuần này tôi nên nhập thêm mặt hàng nào và giảm giá mặt hàng nào?</textarea>
+              </div>
+              <div class="field">
+                <label for="category">Danh mục</label>
+                <select id="category">
+                  <option value="">Tất cả danh mục</option>
+                  <option value="beverage">Beverage</option>
+                  <option value="instant_food">Instant food</option>
+                  <option value="snack">Snack</option>
+                  <option value="dairy">Dairy</option>
+                  <option value="household">Household</option>
+                  <option value="grocery">Grocery</option>
+                  <option value="personal_care">Personal care</option>
+                  <option value="fresh_food">Fresh food</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="period">Giai đoạn</label>
+                <select id="period">
+                  <option value="">Không xét mùa vụ</option>
+                  <option value="summer">Mùa hè</option>
+                  <option value="rainy_season">Mùa mưa</option>
+                  <option value="tet_holiday">Trước Tết</option>
+                  <option value="back_to_school">Tựu trường</option>
+                  <option value="month_end_budget">Cuối tháng</option>
+                </select>
+              </div>
+              <button id="runBtn">Phân tích</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h2>Kết quả agent</h2>
+            </div>
+            <div class="panel-body">
+              <div id="answer" class="answer">Nhấn “Phân tích” để chạy Retail Stock Advisor.</div>
+            </div>
+            <div class="tabs">
+              <button class="tab active" data-tab="restock">Nhập hàng</button>
+              <button class="tab" data-tab="promotion">Khuyến mãi</button>
+              <button class="tab" data-tab="seasonal">Mùa vụ</button>
+              <button class="tab" data-tab="trace">Trace</button>
+            </div>
+            <div class="panel-body">
+              <div id="restockTab"></div>
+              <div id="promotionTab" class="hidden"></div>
+              <div id="seasonalTab" class="hidden"></div>
+              <div id="traceTab" class="trace hidden"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const state = {
+        activeTab: "restock",
+        result: null
+      };
+
+      const byId = (id) => document.getElementById(id);
+
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          state.activeTab = tab.dataset.tab;
+          document.querySelectorAll(".tab").forEach((item) => item.classList.remove("active"));
+          tab.classList.add("active");
+          renderTabs();
+        });
+      });
+
+      byId("runBtn").addEventListener("click", async () => {
+        const runBtn = byId("runBtn");
+        runBtn.disabled = true;
+        runBtn.textContent = "Đang phân tích...";
+        try {
+          const response = await fetch("/api/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              question: byId("question").value,
+              category: byId("category").value,
+              period_id: byId("period").value
+            })
+          });
+          const payload = await response.json();
+          if (!response.ok) {
+            throw new Error(payload.error || "Không thể phân tích");
+          }
+          state.result = payload;
+          renderResult(payload);
+        } catch (error) {
+          byId("answer").textContent = error.message;
+        } finally {
+          runBtn.disabled = false;
+          runBtn.textContent = "Phân tích";
+        }
+      });
+
+      function renderResult(payload) {
+        byId("answer").textContent = payload.answer;
+        byId("metricProducts").textContent = payload.metrics.products_analyzed || 0;
+        byId("metricRestock").textContent = payload.metrics.restock_count || 0;
+        byId("metricPromo").textContent = payload.metrics.promotion_count || 0;
+        byId("metricSeasonal").textContent = payload.metrics.seasonal_count || 0;
+        byId("metricCalls").textContent = payload.metrics.tool_calls || 0;
+        renderTabs();
+      }
+
+      function renderTabs() {
+        ["restock", "promotion", "seasonal", "trace"].forEach((name) => {
+          byId(`${name}Tab`).classList.toggle("hidden", state.activeTab !== name);
+        });
+        if (!state.result) {
+          return;
+        }
+        renderRestock(state.result.restock_items);
+        renderPromotion(state.result.promotion_items);
+        renderSeasonal(state.result.seasonal_items);
+        renderTrace(state.result.trace);
+      }
+
+      function renderRestock(items) {
+        byId("restockTab").innerHTML = table(
+          ["Sản phẩm", "Rủi ro", "Còn ngày", "Nhập đề xuất"],
+          items.map((item) => [
+            item.name,
+            `<span class="risk-${item.risk_level}">${item.risk_level}</span>`,
+            item.days_until_stockout,
+            item.recommended_quantity
+          ]),
+          "Không có mặt hàng cần nhập thêm."
+        );
+      }
+
+      function renderPromotion(items) {
+        byId("promotionTab").innerHTML = table(
+          ["Sản phẩm", "Tồn kho", "Sell-through", "Giảm giá"],
+          items.map((item) => [
+            item.name,
+            item.stock_on_hand,
+            `${item.sell_through_percent}%`,
+            `${item.suggested_discount_percent}%`
+          ]),
+          "Không có mặt hàng cần khuyến mãi."
+        );
+      }
+
+      function renderSeasonal(items) {
+        byId("seasonalTab").innerHTML = table(
+          ["Sản phẩm", "Giai đoạn", "Hệ số", "Nhập trước"],
+          items.map((item) => [
+            item.name,
+            item.period_label,
+            `x${item.demand_multiplier}`,
+            item.recommended_quantity
+          ]),
+          "Chọn một giai đoạn để xem xu hướng mua theo mùa vụ."
+        );
+      }
+
+      function renderTrace(trace) {
+        byId("traceTab").innerHTML = trace.map((item, index) => `
+          <div class="trace-item">
+            <strong>Step ${index + 1}</strong>
+            <div>${escapeHtml(item.thought)}</div>
+            <code>${escapeHtml(item.action)}</code>
+          </div>
+        `).join("");
+      }
+
+      function table(headers, rows, emptyText) {
+        if (!rows.length) {
+          return `<div class="answer">${emptyText}</div>`;
+        }
+        return `
+          <table>
+            <thead><tr>${headers.map((header) => `<th>${header}</th>`).join("")}</tr></thead>
+            <tbody>${rows.map((row) => `<tr>${row.map((cell) => `<td>${cell}</td>`).join("")}</tr>`).join("")}</tbody>
+          </table>
+        `;
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+    </script>
+  </body>
+</html>

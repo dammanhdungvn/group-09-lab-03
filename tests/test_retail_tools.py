@@ -42,3 +42,12 @@ def test_seasonal_stock_plan_uses_period_multiplier():
     assert "P010" in ids
     assert plan["count"] > 0
     assert all(item["demand_multiplier"] > 1 for item in plan["items"])
+
+
+def test_tool_specs_include_react_argument_schemas():
+    specs = RetailTools().tool_specs()
+    spec_by_name = {spec["name"]: spec for spec in specs}
+
+    assert "parameters" in spec_by_name["get_inventory"]
+    assert "product_id" in spec_by_name["detect_stockout_risk"]["parameters"]
+    assert "period_id" in spec_by_name["recommend_seasonal_stock_plan"]["parameters"]

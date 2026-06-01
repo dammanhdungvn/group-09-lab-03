@@ -120,7 +120,7 @@
 
       .metrics {
         display: grid;
-        grid-template-columns: repeat(5, minmax(120px, 1fr));
+        grid-template-columns: repeat(6, minmax(120px, 1fr));
         gap: 12px;
         margin-bottom: 18px;
       }
@@ -201,6 +201,25 @@
         margin-bottom: 16px;
       }
 
+      .mode-toggle {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+
+      .mode-btn {
+        background: #edf3f5;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+
+      .mode-btn.active {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+
       button {
         width: 100%;
         border: 0;
@@ -228,6 +247,36 @@
         border-radius: 8px;
         padding: 16px;
         min-height: 190px;
+      }
+
+      .ai-status {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px 14px;
+        margin-bottom: 12px;
+        background: #fbfcfd;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .ai-status strong {
+        color: var(--text);
+      }
+
+      .ai-status.ai-ok {
+        border-color: rgba(6, 118, 71, 0.28);
+        background: rgba(6, 118, 71, 0.06);
+      }
+
+      .ai-status.ai-fallback {
+        border-color: rgba(161, 92, 7, 0.28);
+        background: rgba(161, 92, 7, 0.07);
+      }
+
+      .ai-status.ai-error {
+        border-color: rgba(180, 35, 24, 0.28);
+        background: rgba(180, 35, 24, 0.07);
       }
 
       .tabs {
@@ -303,6 +352,21 @@
         white-space: pre-wrap;
       }
 
+      .trace-label {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0;
+      }
+
+      .trace-observation {
+        max-height: 220px;
+        overflow: auto;
+        color: var(--text);
+      }
+
       .hidden {
         display: none;
       }
@@ -365,6 +429,7 @@
           <div class="metric"><span>Nên giảm giá</span><strong id="metricPromo">0</strong></div>
           <div class="metric"><span>Theo mùa vụ</span><strong id="metricSeasonal">0</strong></div>
           <div class="metric"><span>Tool calls</span><strong id="metricCalls">0</strong></div>
+          <div class="metric"><span>AI status</span><strong id="metricAI">-</strong></div>
         </section>
 
         <section class="workspace">
@@ -373,6 +438,13 @@
               <h2>Câu hỏi quản lý</h2>
             </div>
             <div class="panel-body">
+              <div class="field">
+                <label>Phương pháp</label>
+                <div class="mode-toggle">
+                  <button class="mode-btn active" type="button" data-mode="base">Base</button>
+                  <button class="mode-btn" type="button" data-mode="llm">LLM</button>
+                </div>
+              </div>
               <div class="field">
                 <label for="question">Prompt</label>
                 <textarea id="question">Tuần này tôi nên nhập thêm mặt hàng nào và giảm giá mặt hàng nào?</textarea>
@@ -411,6 +483,7 @@
               <h2>Kết quả agent</h2>
             </div>
             <div class="panel-body">
+              <div id="aiStatus" class="ai-status hidden"></div>
               <div id="answer" class="answer">Nhấn “Phân tích” để chạy Retail Stock Advisor.</div>
             </div>
             <div class="tabs">
@@ -433,6 +506,7 @@
     <script>
       const state = {
         activeTab: "restock",
+        analysisMode: "base",
         result: null
       };
 
@@ -447,6 +521,14 @@
         });
       });
 
+      document.querySelectorAll(".mode-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.analysisMode = button.dataset.mode;
+          document.querySelectorAll(".mode-btn").forEach((item) => item.classList.remove("active"));
+          button.classList.add("active");
+        });
+      });
+
       byId("runBtn").addEventListener("click", async () => {
         const runBtn = byId("runBtn");
         runBtn.disabled = true;
@@ -458,7 +540,8 @@
             body: JSON.stringify({
               question: byId("question").value,
               category: byId("category").value,
-              period_id: byId("period").value
+              period_id: byId("period").value,
+              analysis_mode: state.analysisMode
             })
           });
           const payload = await response.json();
@@ -482,7 +565,58 @@
         byId("metricPromo").textContent = payload.metrics.promotion_count || 0;
         byId("metricSeasonal").textContent = payload.metrics.seasonal_count || 0;
         byId("metricCalls").textContent = payload.metrics.tool_calls || 0;
+        renderAIStatus(payload.metrics);
         renderTabs();
+      }
+
+      function renderAIStatus(metrics) {
+        const status = byId("aiStatus");
+        status.classList.remove("hidden", "ai-ok", "ai-fallback", "ai-error");
+        const provider = [metrics.ai_provider, metrics.ai_model].filter(Boolean).join(" / ");
+        const method = metrics.method_label || metrics.analysis_mode || "unknown";
+        if (!metrics.ai_enabled) {
+          byId("metricAI").textContent = "Base";
+          status.innerHTML = `<strong>Method:</strong> ${escapeHtml(method)}. Khong goi LLM, chi chay base deterministic.`;
+          return;
+          status.innerHTML = "<strong>AI:</strong> tắt, đang chạy rule-based deterministic.";
+          return;
+        }
+        if (metrics.ai_used) {
+          byId("metricAI").textContent = "LLM";
+          status.classList.add("ai-ok");
+          status.innerHTML = `<strong>Method:</strong> ${escapeHtml(method)}. Da goi LLM thanh cong${provider ? ` (${escapeHtml(provider)})` : ""}. Khong dung base fallback.`;
+          return;
+          status.classList.add("ai-ok");
+          status.innerHTML = `<strong>AI:</strong> đã gọi LLM thành công${provider ? ` (${escapeHtml(provider)})` : ""}. Trace bên dưới là Thought → Action → Observation.`;
+          return;
+        }
+        if (metrics.ai_error) {
+          byId("metricAI").textContent = "LLM error";
+          status.classList.add("ai-error");
+          status.innerHTML = `<strong>Method:</strong> ${escapeHtml(method)}. LLM loi va khong fallback. Ly do: ${escapeHtml(shortReason(metrics.ai_error))}`;
+          return;
+        }
+        if (metrics.ai_attempted || metrics.fallback_used) {
+          byId("metricAI").textContent = "Fallback";
+          status.classList.add("ai-fallback");
+          const reason = shortReason(metrics.fallback_reason);
+          status.innerHTML = `<strong>Method:</strong> ${escapeHtml(method)}. Da thu goi LLM${provider ? ` (${escapeHtml(provider)})` : ""}, nhung fallback sang base. Ly do: ${escapeHtml(reason)}`;
+          return;
+          status.classList.add("ai-fallback");
+          const oldReason = shortReason(metrics.fallback_reason);
+          status.innerHTML = `<strong>AI:</strong> đã thử gọi LLM${provider ? ` (${escapeHtml(provider)})` : ""}, nhưng fallback sang rule-based. Lý do: ${escapeHtml(reason)}`;
+          return;
+        }
+        byId("metricAI").textContent = "Ready";
+        status.innerHTML = "<strong>AI:</strong> sẵn sàng.";
+      }
+
+      function shortReason(reason) {
+        if (!reason) {
+          return "không có thông tin lỗi.";
+        }
+        const firstLine = String(reason).split("\n")[0];
+        return firstLine.length > 180 ? `${firstLine.slice(0, 177)}...` : firstLine;
       }
 
       function renderTabs() {
@@ -541,8 +675,12 @@
         byId("traceTab").innerHTML = trace.map((item, index) => `
           <div class="trace-item">
             <strong>Step ${index + 1}</strong>
+            <div class="trace-label">Thought</div>
             <div>${escapeHtml(item.thought)}</div>
+            <div class="trace-label">Action</div>
             <code>${escapeHtml(item.action)}</code>
+            <div class="trace-label">Observation</div>
+            <code class="trace-observation">${escapeHtml(JSON.stringify(item.observation, null, 2))}</code>
           </div>
         `).join("");
       }

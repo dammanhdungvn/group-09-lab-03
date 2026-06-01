@@ -1,7 +1,7 @@
 import logging
 import json
 import os
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any, Dict
 
 class IndustryLogger:
@@ -10,6 +10,7 @@ class IndustryLogger:
     Logs to both console and a file in JSON format.
     """
     def __init__(self, name: str = "AI-Lab-Agent", log_dir: str = "logs"):
+        logging.raiseExceptions = False
         self.logger = logging.getLogger(name)
         self.logger.setLevel(logging.INFO)
 
@@ -32,7 +33,7 @@ class IndustryLogger:
     def log_event(self, event_type: str, data: Dict[str, Any]):
         """Logs an event with a timestamp and type."""
         payload = {
-            "timestamp": datetime.now(UTC).isoformat(),
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "event": event_type,
             "data": data
         }

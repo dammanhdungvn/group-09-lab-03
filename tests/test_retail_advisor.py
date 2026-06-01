@@ -11,6 +11,8 @@ def test_weekly_advisor_returns_restock_promotion_and_trace():
     assert result.metrics["tool_calls"] >= 6
     assert result.metrics["products_analyzed"] == 12
     assert any("recommend_reorder_quantity" in step.action for step in result.trace)
+    assert result.trace[0].action == 'get_inventory({"category": null})'
+    assert isinstance(result.trace[0].observation, dict)
     assert "Khuyến nghị tuần này" in result.answer
 
 

@@ -7,7 +7,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
 
-from src.retail.advisor import RetailStockAdvisor
+from src.retail.hybrid_advisor import HybridRetailStockAdvisor
 from src.retail.repositories import JsonRetailRepository
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -15,7 +15,7 @@ MAX_BODY_BYTES = 16 * 1024
 
 
 class RetailAdvisorHandler(BaseHTTPRequestHandler):
-    advisor = RetailStockAdvisor()
+    advisor: HybridRetailStockAdvisor | None = None
     repository = JsonRetailRepository()
 
     def do_GET(self) -> None:
@@ -57,11 +57,17 @@ class RetailAdvisorHandler(BaseHTTPRequestHandler):
             question = str(payload.get("question", "")).strip()
             category = str(payload.get("category", "")).strip() or None
             period_id = str(payload.get("period_id", "")).strip() or None
+            analysis_mode = str(payload.get("analysis_mode", "")).strip() or None
             if not question:
                 self._send_json({"error": "question is required"}, HTTPStatus.BAD_REQUEST)
                 return
 
-            result = self.advisor.answer(question=question, category=category, period_id=period_id)
+            result = self._advisor().answer(
+                question=question,
+                category=category,
+                period_id=period_id,
+                analysis_mode=analysis_mode,
+            )
             self._send_json(
                 {
                     "answer": result.answer,
@@ -77,6 +83,12 @@ class RetailAdvisorHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format: str, *args: Any) -> None:
         return
+
+    @classmethod
+    def _advisor(cls) -> HybridRetailStockAdvisor:
+        if cls.advisor is None:
+            cls.advisor = HybridRetailStockAdvisor()
+        return cls.advisor
 
     def _send_file(self, path: Path, content_type: str) -> None:
         if path.parent != STATIC_DIR:

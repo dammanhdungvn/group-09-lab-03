@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import time
 from typing import Any, Callable
 
@@ -175,7 +176,7 @@ class RetailStockAdvisor:
         trace.append(
             ToolTrace(
                 thought=thought,
-                action=f"{name}({kwargs})",
+                action=f"{name}({json.dumps(kwargs, ensure_ascii=False)})",
                 observation=observation,
             )
         )

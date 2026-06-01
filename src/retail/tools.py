@@ -248,41 +248,75 @@ class RetailTools:
             {
                 "name": "get_inventory",
                 "description": "Get stock, reorder point, and safety stock by product_id or category.",
+                "parameters": {
+                    "product_id": "optional string product id such as P001",
+                    "category": "optional category string such as beverage",
+                },
                 "func": self.get_inventory,
             },
             {
                 "name": "get_sales_history",
                 "description": "Get 7/30-day sales history for one product_id.",
+                "parameters": {
+                    "product_id": "required string product id such as P001",
+                    "days": "optional integer from 1 to 30, usually 7 or 30",
+                },
                 "func": self.get_sales_history,
             },
             {
                 "name": "calculate_sell_through_rate",
                 "description": "Calculate sell-through rate from sold units and current stock.",
+                "parameters": {
+                    "product_id": "required string product id such as P001",
+                    "days": "optional integer from 1 to 30, usually 30",
+                },
                 "func": self.calculate_sell_through_rate,
             },
             {
                 "name": "detect_stockout_risk",
                 "description": "Classify a product as low, medium, or high stockout risk.",
+                "parameters": {
+                    "product_id": "required string product id such as P001",
+                    "days": "optional integer from 1 to 30, usually 7",
+                },
                 "func": self.detect_stockout_risk,
             },
             {
                 "name": "detect_slow_moving_items",
                 "description": "Find overstocked products with weak 30-day sell-through.",
+                "parameters": {
+                    "category": "optional category string such as snack",
+                    "days": "optional integer from 1 to 30, usually 30",
+                },
                 "func": self.detect_slow_moving_items,
             },
             {
                 "name": "recommend_reorder_quantity",
                 "description": "Recommend reorder quantity using lead time, pack size, and safety stock.",
+                "parameters": {
+                    "product_id": "required string product id such as P001",
+                    "days": "optional integer from 1 to 30, usually 7",
+                    "cover_days": "optional integer target demand cover window, default 14",
+                },
                 "func": self.recommend_reorder_quantity,
             },
             {
                 "name": "get_seasonal_trends",
                 "description": "Get demand multipliers for a named season or retail period.",
+                "parameters": {
+                    "period_id": "required string such as summer, rainy_season, tet_holiday, back_to_school, month_end_budget",
+                },
                 "func": self.get_seasonal_trends,
             },
             {
                 "name": "recommend_seasonal_stock_plan",
                 "description": "Recommend pre-season reorder actions using demand multipliers.",
+                "parameters": {
+                    "period_id": "required string such as tet_holiday",
+                    "category": "optional category string such as beverage",
+                    "days": "optional integer from 1 to 30, usually 30",
+                    "cover_days": "optional integer target seasonal cover window, default 21",
+                },
                 "func": self.recommend_seasonal_stock_plan,
             },
         ]

@@ -2,6 +2,8 @@
 
 Welcome to Phase 3 of the Agentic AI course! This lab focuses on moving from a simple LLM Chatbot to a sophisticated **ReAct Agent** with industry-standard monitoring.
 
+The retail demo now runs as a hybrid AI advisor: it tries a real LLM ReAct flow first and falls back to deterministic retail rules when provider configuration or model output is not usable.
+
 ## 🚀 Getting Started
 
 ### 1. Setup Environment
@@ -35,6 +37,30 @@ Change your `DEFAULT_PROVIDER` and set the path:
 ```env
 DEFAULT_PROVIDER=local
 LOCAL_MODEL_PATH=./models/Phi-3-mini-4k-instruct-q4.gguf
+```
+
+## Retail Advisor AI Mode
+
+The web demo uses `HybridRetailStockAdvisor`:
+
+- `src/core/provider_factory.py` creates OpenAI, Gemini, or local providers from `.env`.
+- `DEFAULT_PROVIDER=dashscope` uses DashScope's OpenAI-compatible endpoint for Qwen models.
+- The current recommended fast Qwen setting is `DEFAULT_MODEL=qwen3-coder-flash`.
+- `src/retail/hybrid_advisor.py` wires `ReActAgent` to the retail tools.
+- `RETAIL_ADVISOR_MODE=hybrid` tries AI first, then falls back to deterministic analysis.
+- `AI_MAX_STEPS=8` controls the maximum Thought/Action/Observation loops.
+- `AI_TIMEOUT_SECONDS=300` gives strict LLM mode up to five minutes before reporting an LLM error.
+
+Run the UI:
+
+```bash
+python -m src.ui.server
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8000
 ```
 
 ## 🎯 Lab Objectives

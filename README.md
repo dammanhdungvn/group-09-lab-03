@@ -15,6 +15,7 @@ Hệ thống hỗ trợ nhiều chế độ phân tích:
 | Đàm Mạnh Dũng | 2A202600741 |
 | Nguyễn Hoàng Thanh Tùng | 2A202600846 |
 | Lê_Bá_Chiến | 2A202600755 |
+| Nguyễn Phan Duy Bảo | 2A202600688 |
 
 ## Tổng quan thư mục
 
